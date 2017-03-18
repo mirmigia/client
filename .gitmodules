@@ -1,3 +1,6 @@
 [submodule "SUIT"]
 	path = src/vendor/SUIT
 	url = https://github.com/vrld/SUIT.git
+[submodule "cpml"]
+	path = src/vendor/cpml
+	url = https://github.com/excessive/cpml.git
