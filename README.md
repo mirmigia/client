@@ -1,10 +1,10 @@
-# Lasius Client
+# Mirmigia Client
 
-Client-side application for Lasius.
+Client-side application for Mirmigia.
 
 ## Requirements
 
-* [Lua](https://www.lua.org/) >= 5.1
+* [Lua](https://www.lua.org/) >= 5.2
 * [Love2D](https://love2d.org/)
 
 ## Contributors
