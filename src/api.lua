@@ -1,7 +1,7 @@
-api = {}
+local API = {}
 
 -- Fetch sector data from API
-function api.fetchSector ()
+function API.fetchSector ()
   return {
     id = "ACD234",
     dimensions = {32, 32},
@@ -25,7 +25,7 @@ function api.fetchSector ()
 end
 
 -- Fetch all (current) player ships from the API
-function api.fetchShips ()
+function API.fetchShips ()
   return {
     {
       id = "TBP001",
@@ -51,4 +51,4 @@ function api.fetchShips ()
   }
 end
 
-return api
+return API
