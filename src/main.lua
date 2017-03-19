@@ -1,8 +1,8 @@
 require 'vendor.fun' ()
-require 'utils'
-local API = require 'API'
+local API = require 'api'
 local Celestial = require 'celestial'
 local UI  = require 'ui'
+local Ship = require 'ship'
 
 CELESTIAL_SIZE = 5
 
@@ -14,11 +14,11 @@ function love.load ()
   local sector = API.fetchSector()
   -- Convert celestials JSON to objects
   local celestials = map(Celestial.fromAPI, sector.celestials)
+  local ships = map(Ship.fromAPI, API.fetchShips())
   state = {
     celestials = celestials,
-    ships = API.fetchShips(),
+    ships = ships,
   }
-  printTable(state.ships)
 end
 
 function love.keypressed (key)

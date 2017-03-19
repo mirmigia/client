@@ -30,11 +30,12 @@ function Celestial:draw (state)
   local ships = filter(function (ship)
       return ship.location == self.id
   end, state.ships)
-  -- Render ship count; TODO: should just be ship:draw()
-  if #ships > 0 then
+  -- Render ship count
+  if length(ships) > 0 then
+    local x, y = cpml.vec2.unpack(self.pos)
     love.graphics.setColor(0, 255, 0)
     love.graphics.circle('line', x, y, Celestial.SIZE + 1)
-    love.graphics.print(#ships, x, y + Celestial.SIZE + 1)
+    love.graphics.print(length(ships), x, y + Celestial.SIZE + 1)
   end
 end
 
