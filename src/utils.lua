@@ -4,7 +4,7 @@ local N_TOO_MANY_CYCLES = 100
 -- Returns a string representation for value `v` for use when displaying
 -- to the user the correct representation for a value. E.g. a string
 -- should be displayed as `"Some string"` and not `Some String`
-local function toRepresentation (v)
+local function torepr (v)
   if type(v) == 'string' then
     return string.format('%q', v)
   else
@@ -16,7 +16,7 @@ end
 -- represents the current indentation level, defaults to 0.
 --
 -- Throws an error if a cyclical reference is detected.
-function printTable (t, level)
+function print_table (t, level)
   level = level or 1
 
   if level > N_TOO_MANY_CYCLES then
@@ -33,9 +33,9 @@ function printTable (t, level)
     end
 
     if type(v) == 'table' then
-      printTable(v, level + 1)
+      print_table(v, level + 1)
     else
-      io.write(toRepresentation(v) .. ",")
+      io.write(torepr(v) .. ",")
     end
     io.write("\n")
   end

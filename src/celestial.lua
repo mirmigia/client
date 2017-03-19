@@ -13,7 +13,7 @@ function Celestial.new (id, pos)
   return cel
 end
 
-function Celestial.fromAPI (json)
+function Celestial.from_api (json)
   local x = json.pos[1]
   local y = json.pos[2]
   return Celestial.new(json.id, cpml.vec2.new(x, y))

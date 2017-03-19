@@ -8,6 +8,6 @@ function Ship.new (o)
   return o
 end
 
-Ship.fromAPI = Ship.new
+Ship.from_api = Ship.new
 
 return Ship

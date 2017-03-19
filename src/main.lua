@@ -11,10 +11,10 @@ function love.load ()
     x = love.graphics.getWidth() - 200,
     y = 100,
   }
-  local sector = API.fetchSector()
+  local sector = API.fetch_sector()
   -- Convert celestials JSON to objects
-  local celestials = map(Celestial.fromAPI, sector.celestials)
-  local ships = map(Ship.fromAPI, API.fetchShips())
+  local celestials = map(Celestial.from_api, sector.celestials)
+  local ships = map(Ship.from_api, API.fetch_ships())
   state = {
     celestials = celestials,
     ships = ships,
