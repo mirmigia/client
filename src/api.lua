@@ -35,7 +35,7 @@ function API.fetchShips ()
       location = "CEL222", -- current celestial body
     },
     {
-      id = "",
+      id = "HMS919",
       name = "HMS Interceptor",
       type = "Battleship",
       range = 8, -- distance in light years
