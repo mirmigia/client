@@ -42,6 +42,9 @@ function love.mousepressed (mousex, mousey)
 end
 
 function love.update (dt)
+  -- TODO: only run in development
+  require('vendor.lurker').update()
+
   each(function (cel)
       cel:update(state, dt)
   end, state.celestials)
