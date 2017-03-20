@@ -57,7 +57,7 @@ function love.draw ()
   each(function (cel)
       cel:draw(state)
       -- Draw selected indicator
-      if ui.selected == cel.id then
+      if ui.selected and ui.selected.celestial == cel.id then
         local x = cel.pos.x
         local y = cel.pos.y
         love.graphics.setColor(255, 0, 0)

@@ -11,30 +11,26 @@ end
 
 -- Set the selected celestial body
 function UI:select (celestial)
-  self.selected = celestial.id
-  self.selected_ship = nil
+  self.selected = {
+    celestial = celestial.id,
+    ship = nil
+  }
 end
 
 -- De-selects any currently selected UI elements
 function UI:deselect ()
   self.selected = nil
-  self.selected_ship = nil
-end
-
--- Returns true if there are any items currently selected
-function UI:has_selected ()
-  return self.selected or self.selected_ship
 end
 
 function UI:show_ships (ships)
   local ships = filter(function (ship)
-      return ship.location == self.selected
+      return ship.location == self.selected.celestial
   end, ships)
 
   if length(ships) > 0 then
     each(function (ship)
       if suit.Button(ship.name, suit.layout:row(150, 30)).hit then
-        self.selected_ship = ship
+        self.selected.ship = ship
       end
     end, ships)
   end
@@ -57,20 +53,18 @@ function UI:update (state)
   suit.layout:reset(self.x, self.y)
   suit.layout:padding(5, 5)
 
-  if self:has_selected() then
+  if self.selected then
     if suit.Button("X", suit.layout:row(15, 15)).hit then
       self:deselect()
+    elseif self.selected.ship then
+      self:show_ship_details(self.selected.ship)
+      -- go back to list view. TODO: allign with X button
+      if suit.Button("<", suit.layout:row(15, 15)).hit then
+        self.selected.ship = nil
+      end
+    else
+      self:show_ships(state.ships)
     end
-  end
-
-  if self.selected_ship then
-    self:show_ship_details(self.selected_ship)
-    -- go back to list view. TODO: allign with X button
-    if suit.Button("<", suit.layout:row(15, 15)).hit then
-      self.selected_ship = nil
-    end
-  elseif self.selected then
-    self:show_ships(state.ships)
   end
 end
 
