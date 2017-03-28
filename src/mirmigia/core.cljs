@@ -37,15 +37,36 @@ the width and height of the canvas element respectively."
   [w h]
   [:canvas {:width w :height h}])
 
-(rum/defc main-page
+(rum/defc ship-view [ships]
+  [:table
+   [:thead
+    ;; Basically all the (keys ships) made human readable.
+    [:th "ID"]
+    [:th "Name"]
+    [:th "Type"]
+    [:th "Range"]
+    [:th "Location"]]
+   [:tbody
+    (for [s ships]
+      [:tr {:key (:id s)}
+       [:td (:id s)]
+       [:td (:name s)]
+       [:td (str (:type s))]
+       [:td (:range s)]
+       [:td (:location s)]])]])
+
+(rum/defc main-page < rum/reactive
   "Main page used for the UI. Also contains the game canvas."
-  []
-  [:div#main
-   (canvas 800 600)
-   [:p "Testing UI"]])
+  [db]
+  (let [state (rum/react db)]
+    [:div#main
+     (canvas 800 600)
+     [:div#ships
+      [:h3 "Available Ships"]
+      (ship-view (:ships state))]]))
 
 (defn mount-rum! [elem]
-  (rum/mount (main-page) elem))
+  (rum/mount (main-page db/app-state) elem))
 
 (defn on-js-reload
   "Called in development when a change is made."
