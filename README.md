@@ -1,10 +1,11 @@
-# mirmigia
+# Mirmigia Client
 
-FIXME: Write a one-line description of your library/project.
+Client-side application for Mirmigia.
 
-## Overview
+## Requirements
 
-FIXME: Write a paragraph about the library/project and highlight its goals.
+* JDK 1.8
+* Leiningen
 
 ## Setup
 
@@ -32,8 +33,11 @@ To create a production build run:
 And open your browser in `resources/public/index.html`. You will not
 get live reloading, nor a REPL. 
 
+## Contributors
+
+* [Antonis Kalou](https://github.com/kalouantonis)
+* [Bas Huis](https://github.com/bas080)
+
 ## License
 
-Copyright © 2014 FIXME
-
-Distributed under the Eclipse Public License either version 1.0 or (at your option) any later version.
+[GNU GPLv3](LICENSE)
