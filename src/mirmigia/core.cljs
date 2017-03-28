@@ -1,13 +1,10 @@
 (ns mirmigia.core
   (:require [mirmigia.api  :as api]
             [mirmigia.db   :as db]
-            [mirmigia.draw :as draw]))
+            [mirmigia.draw :as draw]
+            [rum.core :as rum]))
 
 (enable-console-print!)
-
-(defn on-js-reload
-  "Called in development when a change is made."
-  [])
 
 (defn render! [ctx {:keys [sector]}]
   (draw/clear-screen ctx)
@@ -15,15 +12,51 @@
     (draw/set-fill-color! ctx [255 255 255])
     (draw/fill-circle ctx pos radius)))
 
+;; TODO: take renderer as parameter
+(def canvas-mixin
+  "Mixin to be used with a canvas element. Starts the renderer, ensures
+  cleanup and that the canvas is not changed when data is changed."
+  {:did-mount
+   (fn [state]
+     (let [ctx (-> state (rum/dom-node) (.getContext "2d"))
+           renderer (fn this [dt]
+                      (render! ctx @db/app-state)
+                      (js/requestAnimationFrame this))]
+       ;; Start renderer
+       (js/requestAnimationFrame renderer)
+       (merge state {::renderer renderer})))
+   :will-unmount
+   (fn [state]
+     ;; FIXME: destroy renderer
+     state)
+   :should-update (constantly false)})
+
+(rum/defc canvas < canvas-mixin
+  "Canvas used for rendering the main game. `w` and `h` represent
+the width and height of the canvas element respectively."
+  [w h]
+  [:canvas {:width w :height h}])
+
+(rum/defc main-page
+  "Main page used for the UI. Also contains the game canvas."
+  []
+  [:div#main
+   (canvas 800 600)
+   [:p "Testing UI"]])
+
+(defn mount-rum! [elem]
+  (rum/mount (main-page) elem))
+
+(defn on-js-reload
+  "Called in development when a change is made."
+  []
+  (mount-rum! (.getElementById js/document "app")))
+
 (defn ^:export main
   "Application entry point."
   []
   ;; Load app state
   (swap! db/app-state merge {:sector (api/fetch-sector)
                              :ships  (api/fetch-ships)})
-  ;; Start renderer
-  (let [canvas (.getElementById js/document "canvas")
-        ctx (.getContext canvas "2d")]
-    ((fn this [dt]
-       (render! ctx @db/app-state)
-       (js/requestAnimationFrame this)))))
+  ;; Initialize UI
+  (mount-rum! (.getElementById js/document "app")))
