@@ -60,7 +60,6 @@ the width and height of the canvas element respectively."
   [db]
   (let [state (rum/react db)]
     [:div#main
-      [:h1#game-title "MIRMIGIA - Game of the year"]
      (canvas 800 600)
      [:div#ships
       [:h3 "Available Ships"]
