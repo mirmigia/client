@@ -1,2 +1,27 @@
 /* some style */
+ @import url('https://fonts.googleapis.com/css?family=Titillium+Web:400,600');
 
+h1, h2, h3 {
+    font-family: 'Titillium Web';
+    font-weight: 400;
+}
+
+canvas {
+    display: block;
+    margin: 0 auto;
+}
+
+#ships {
+    width: 40%;
+    margin: 0 auto;
+    font-family: 'Titillium Web';
+    font-weight: 400;
+}
+
+#game-title {
+    text-align: center;
+}
+
+thead tr td {
+    font-weight: 600;
+}
