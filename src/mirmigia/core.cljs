@@ -35,8 +35,7 @@
   "Canvas used for rendering the main game. `w` and `h` represent
 the width and height of the canvas element respectively."
   [w h]
-  [:canvas {:width w :height h}])
-
+  [:canvas {:width w :height h}]) 
 (rum/defc ship-view [ships]
   [:table
    [:thead

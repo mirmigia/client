@@ -1,8 +1,10 @@
-/* some style */
- @import url('https://fonts.googleapis.com/css?family=Titillium+Web:400,600');
+html,
+body {
+	  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    height: 100%;
+}
 
 h1, h2, h3 {
-    font-family: 'Titillium Web';
     font-weight: 400;
 }
 
@@ -14,7 +16,6 @@ canvas {
 #ships {
     width: 40%;
     margin: 0 auto;
-    font-family: 'Titillium Web';
     font-weight: 400;
 }
 
