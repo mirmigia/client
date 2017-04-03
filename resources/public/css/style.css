@@ -18,7 +18,7 @@ canvas {
     font-weight: 400;
 }
 
-.game-title {
+#game-title {
     text-align: center;
 }
 
