@@ -7,16 +7,37 @@
 
 (enable-console-print!)
 
+(defn square 
+  "Squares the value of `x`."
+  [x]
+  (* x x))
+
 (defmethod events/handle-event :canvas/clicked
   [state [_ ev]]
-  (println "Received clicked event:" ev)
-  state)
+  ;; Adjust to X + Y on canvas
+  (let [target (.-originalTarget ev)
+        x (- (.-pageX ev) (.-offsetLeft target))
+        y (- (.-pageY ev) (.-offsetTop target))
+        selected? (fn [{:keys [pos radius]}]
+                    (let [[cel-x cel-y] pos]
+                      (< (+ (square (- x cel-x) (square (- y cel-y))))
+                         (square radius))))]
+    (update-in state [:sector :celestials] 
+               #(map (fn [cel]
+                       (if (selected? cel)
+                         (assoc cel :selected? true)
+                         (assoc cel :selected? false)))
+                     %))))
 
 (defn render! [ctx {:keys [sector]}]
   (draw/clear-screen ctx)
-  (doseq [{:keys [pos radius]} (:celestials sector)]
+  (doseq [{:keys [pos radius selected?]} (:celestials sector)]
     (draw/set-fill-color! ctx [255 255 255])
-    (draw/fill-circle ctx pos radius)))
+    (draw/fill-circle ctx pos radius)
+    (when selected?
+      (draw/set-stroke-color! ctx [0 255 0])
+      (draw/set-line-width! ctx 3)
+      (draw/stroke-circle ctx pos (+ radius 4)))))
 
 (defn add-event-listeners! 
   "Add event listeners to the given element."
@@ -47,7 +68,7 @@
 
 (rum/defc canvas < canvas-mixin
   "Canvas used for rendering the main game. `w` and `h` represent
-the width and height of the canvas element respectively."
+  the width and height of the canvas element respectively."
   [w h]
   [:canvas {:width w :height h}])
 
