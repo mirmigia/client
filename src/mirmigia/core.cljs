@@ -1,10 +1,16 @@
 (ns mirmigia.core
-  (:require [mirmigia.api  :as api]
-            [mirmigia.db   :as db]
-            [mirmigia.draw :as draw]
+  (:require [mirmigia.api    :as api]
+            [mirmigia.db     :as db]
+            [mirmigia.draw   :as draw]
+            [mirmigia.events :as events]
             [rum.core :as rum]))
 
 (enable-console-print!)
+
+(defmethod events/handle-event :canvas/clicked
+  [state [_ ev]]
+  (println "Received clicked event:" ev)
+  state)
 
 (defn render! [ctx {:keys [sector]}]
   (draw/clear-screen ctx)
@@ -12,16 +18,24 @@
     (draw/set-fill-color! ctx [255 255 255])
     (draw/fill-circle ctx pos radius)))
 
+(defn add-event-listeners! 
+  "Add event listeners to the given element."
+  [elem listeners]
+  (doseq [[type f] listeners]
+    (.addEventListener elem (name type) f)))
+
 ;; TODO: take renderer as parameter
 (def canvas-mixin
   "Mixin to be used with a canvas element. Starts the renderer, ensures
   cleanup and that the canvas is not changed when data is changed."
   {:did-mount
    (fn [state]
-     (let [ctx (-> state (rum/dom-node) (.getContext "2d"))
+     (let [node (rum/dom-node state)
+           ctx (.getContext node "2d")
            renderer (fn this [dt]
                       (render! ctx @db/app-state)
                       (js/requestAnimationFrame this))]
+       (add-event-listeners! node {:click #(events/dispatch! [:canvas/clicked %])})
        ;; Start renderer
        (js/requestAnimationFrame renderer)
        (merge state {::renderer renderer})))
