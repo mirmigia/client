@@ -2,6 +2,10 @@ html,
 body {
 	  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     height: 100%;
+    overflow: hidden;
+    /* Dark background, light text */
+    color: #eeeeee;
+    background-color: #222222;
 }
 
 h1, h2, h3 {
@@ -13,12 +17,29 @@ canvas {
     margin: 0 auto;
 }
 
-#ships {
-    width: 40%;
-    margin: 0 auto;
-    font-weight: 400;
+/***************************************************/
+/* UI Overlays */
+/***************************************************/
+#selected-overlay {
+    background-color: rgba(51, 51, 255, 0.5);
+    display: inline;
+    margin: auto;
+    overflow: auto;
+    position: absolute;
+    z-index: 1;
+    /* Center bottom */
+    bottom: 0;
+    left: 50%;
 }
 
-thead tr td {
-    font-weight: 600;
+#selected-overlay .item {
+    display: block;
+    float: left;
+    padding-left: 5px;
+    padding-right: 5px;
+    border: 2px solid #00ffff;
+}
+
+#selected-overlay button {
+    background-color: #00ffff;
 }

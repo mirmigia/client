@@ -5,12 +5,12 @@
             [mirmigia.events :as events]
             [rum.core :as rum]))
 
-(enable-console-print!)
-
-(defn square 
+(defn square
   "Squares the value of `x`."
   [x]
   (* x x))
+
+(def find-first (comp first filter))
 
 (defmethod events/handle-event :canvas/clicked
   [state [_ ev]]
@@ -20,14 +20,13 @@
         y (- (.-pageY ev) (.-offsetTop target))
         selected? (fn [{:keys [pos radius]}]
                     (let [[cel-x cel-y] pos]
-                      (< (+ (square (- x cel-x) (square (- y cel-y))))
+                      (< (+ (square (- x cel-x)) (square (- y cel-y)))
                          (square radius))))]
-    (update-in state [:sector :celestials] 
+    (update-in state [:sector :celestials]
                #(map (fn [cel]
                        (if (selected? cel)
                          (assoc cel :selected? true)
-                         (assoc cel :selected? false)))
-                     %))))
+                         (assoc cel :selected? false))) %))))
 
 (defn render! [ctx {:keys [sector]}]
   (draw/clear-screen ctx)
@@ -39,7 +38,7 @@
       (draw/set-line-width! ctx 3)
       (draw/stroke-circle ctx pos (+ radius 4)))))
 
-(defn add-event-listeners! 
+(defn add-event-listeners!
   "Add event listeners to the given element."
   [elem listeners]
   (doseq [[type f] listeners]
@@ -94,11 +93,14 @@
   "Main page used for the UI. Also contains the game canvas."
   [db]
   (let [state (rum/react db)]
-    [:div#main
-     (canvas 800 600)
-     [:div#ships
-      [:h3 "Available Ships"]
-      (ship-view (:ships state))]]))
+    [:#main
+     (canvas (.-clientWidth js/document.body)
+             (.-clientHeight js/document.body))
+     (when-let [cel (find-first :selected? (get-in state [:sector :celestials]))]
+       [:#selected-overlay
+        (for [s (:ships state)
+              :when (= (:location s) (:id cel))]
+          [:.item [:button (:id s)]])])]))
 
 (defn mount-rum! [elem]
   (rum/mount (main-page db/app-state) elem))
@@ -111,8 +113,10 @@
 (defn ^:export main
   "Application entry point."
   []
+  (enable-console-print!)
+
   ;; Load app state
   (swap! db/app-state merge {:sector (api/fetch-sector)
                              :ships  (api/fetch-ships)})
-  ;; Initialize UI
+
   (mount-rum! (.getElementById js/document "app")))
